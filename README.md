@@ -1,6 +1,6 @@
 # quanttide-laboratory-of-course-development
 
-课程开发实验室。本地启动和模拟验证 provider/studio 的入口。
+课程开发实验室。模拟用户访问 provider/studio 的入口。
 
 ## 目录结构
 
@@ -10,11 +10,8 @@ bin/                          ← 编译产物（gitignored）
 └── studio/                     studio bundle（Flutter）
 
 src/
-├── provider.sh                ← 启动 provider（仅启动，不模拟）
-├── studio.sh                  ← 启动 studio（仅启动，不模拟）
-├── provider_sim/main.go       ← 模拟用户访问 provider API（CRUD 全流程）
-├── studio_sim/main.go         ← 模拟用户使用 studio（运行测试 + 验证产物）
-└── go.mod
+├── provider_sim.py           ← 模拟用户访问 provider API（CRUD 全流程）
+├── studio_sim.py             ← 模拟用户使用 studio（运行测试 + 验证产物）
 ```
 
 ## 编译
@@ -35,17 +32,8 @@ cp -r build/linux/x64/release/bundle ../../../examples/default/bin/studio
 
 ```bash
 # 模拟用户访问 provider API
-cd examples/default/src
-go run ./provider_sim/
+python examples/default/src/provider_sim.py
 
 # 模拟用户使用 studio（运行测试 + 验证产物）
-cd examples/default/src
-go run ./studio_sim/
-```
-
-## 仅启动（不模拟操作）
-
-```bash
-./examples/default/src/provider.sh
-./examples/default/src/studio.sh
+python examples/default/src/studio_sim.py
 ```
