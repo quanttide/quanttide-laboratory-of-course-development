@@ -76,62 +76,98 @@ bin/studio/
 
 ### 精确定位点击的方法
 
-#### 方法一：OCR bounding box（推荐）
+#### 推荐方案：OpenCV 模板匹配（通用 + 抗 UI 变动）
+
+预先截取目标 UI 元素的截图保存为模板，用 OpenCV 在窗口截图中匹配定位。
 
 ```bash
-# 1. 截图并 OCR 输出 TSV（含每个字的坐标）
+# click_at_template — 给截图模板，返回中心坐标并点击
+click_at_template() {
+  local template=$1 window=$2
+
+  python3 -c "
+import cv2, numpy as np, sys, json
+
+shot = cv2.imread('/tmp/shot.png')
+template = cv2.imread('$template')
+h, w = template.shape[:2]
+res = cv2.matchTemplate(shot, template, cv2.TM_CCOEFF_NORMED)
+_, max_val, _, max_loc = cv2.minMaxLoc(res)
+
+if max_val < 0.7:
+    print(f'置信度过低: {max_val:.2f}', file=sys.stderr)
+    sys.exit(2)
+
+cx, cy = max_loc[0] + w//2, max_loc[1] + h//2
+print(f'{cx} {cy}')
+" 2>/dev/null || return 1
+
+  read cx cy
+  xdotool mousemove --window "$window" "$cx" "$cy" click 1
+}
+```
+
+使用示例：
+
+```bash
+# 1. 截图保存为模板（只需做一次）
+import -window $WID /tmp/shot.png
+# 用图片编辑工具从截图中裁剪 tab 按钮区域，保存为 tab_kaifa.png
+
+# 2. 自动化流程
+import -window $WID /tmp/shot.png
+click_at_template "assets/tab_kaifa.png" $WID
+sleep 1
+
+# 3. 验证
+import -window $WID /tmp/shot2.png
+tesseract /tmp/shot2.png stdout -l chi_sim 2>/dev/null | grep "研发" \
+  && echo "✅ 导航成功" || echo "❌ 导航失败"
+```
+
+#### 备选：OCR bounding box（无模板时快速定位）
+
+```bash
 import -window $WID /tmp/shot.png
 tesseract /tmp/shot.png /tmp/shot -l chi_sim --psm 6 tsv
-
-# 2. 解析目标文字的中心坐标
-# TSV 列: level page block par line word left top width height conf text
-# word-level (level=5) 的 left/top/width/height 是像素坐标
 awk -F'\t' '$1==5 && $11!="-1" {printf "%s  center=(%d,%d)\n", $12, $7+$9/2, $8+$10/2}' /tmp/shot.tsv
 
-# 示例输出:
-# 课程  center=(384,669)
-# 研发  center=(385,681)
-
-# 3. 点击该坐标（窗口相对坐标）
 xdotool mousemove --window $WID 384 675 click 1
 ```
 
-#### 方法二：像素颜色探测
-
-先通过颜色变化找到 UI 区域边界，再在区域内点击：
+#### 像素颜色探测（无 OCR 无模板时应急用）
 
 ```bash
-# 垂直扫描底部，找到导航栏的起始 y
 for y in $(seq 700 10 819); do
   c=$(convert /tmp/shot.png -crop 1x1+666+$y -format "%[hex:p{0,0}]" info:)
   echo "y=$y color=#$c"
 done
-# 找到颜色突变的位置，那就是导航栏边界
-
-# 水平三等分，点击对应 tab
-# 窗口宽度 W，tab 中心在 W/6, W/2, 5W/6
-NAV_Y=<探测到的导航栏 Y 中心>
-xdotool mousemove --window $WID $((W/2)) $NAV_Y click 1   # 课程研发
+NAV_Y=<探测到的 Y 中心>
+xdotool mousemove --window $WID $((W/2)) $NAV_Y click 1
 ```
 
-#### 验证点击是否生效
+#### 验证点击（三种定位方式通用）
 
 ```bash
-# 点击前截图 + OCR 作为基线
 import -window $WID /tmp/before.png
 tesseract /tmp/before.png /tmp/before -l chi_sim --psm 6
 
-# 执行点击
 xdotool mousemove --window $WID $X $Y click 1
 sleep 1
 
-# 点击后截图 + OCR
 import -window $WID /tmp/after.png
 tesseract /tmp/after.png /tmp/after -l chi_sim --psm 6
 
-# 对比文字变化
-diff /tmp/before.txt /tmp/after.txt && echo "页面未变化" || echo "页面已切换"
+diff /tmp/before.txt /tmp/after.txt && echo "页面未变化" || echo "✅ 页面已切换"
 ```
+
+#### 三种定位方式对比
+
+| 方式 | 速度 | 抗 UI 变动 | 维护成本 |
+|------|------|-----------|---------|
+| OCR bounding box | 慢 | 文字不变即可 | 中 |
+| 像素颜色探测 | 快 | ❌ 颜色一变就崩 | 高 |
+| **OpenCV 模板匹配** | **快** | **相似度容忍微调** | **低** |
 
 ### 已知限制
 
