@@ -39,7 +39,7 @@ ffmpeg -f lavfi -i "testsrc=duration=10:size=640x360:rate=24" \
   lab/videos/quickstart/intro.mp4 -y
 ```
 
-> 生成的视频为 10 秒黑底测试图案 + 440Hz 音频，可在浏览器中正常播放。
+> 也支持下载公共领域视频替代：`curl -L -o lab/videos/quickstart/intro.mp4 "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4"`
 
 ### 1.4 启动服务
 
