@@ -1,39 +1,25 @@
-# quanttide-laboratory-of-course-development
+# 🧪 课程开发实验室
 
-课程开发实验室。模拟用户访问 provider/studio 的入口。
+> 产品实验沙盒 · 小亦 & 小橘子维护
 
-## 目录结构
+画原型、写小网站、试实际效果。零工程规范，自由折腾。GitHub Pages 已开启，推上去就能看。
+
+## 目录
 
 ```
-bin/                          ← 编译产物（gitignored）
-├── qtcloud-course-provider     provider 二进制
-└── studio/                     studio bundle（Flutter）
-
-src/
-├── provider_sim.py           ← 模拟用户访问 provider API（CRUD 全流程）
-├── studio_sim.py             ← 模拟用户使用 studio（运行测试 + 验证产物）
+innovation-prototype/     ← 创新系统原型（进行中）
+assets/                   ← 旧截图
+docs/                     ← provider/studio 文档（历史档案）
+src/                      ← provider/studio 模拟脚本（历史档案）
 ```
 
-## 编译
+## 规矩
 
-```bash
-# 编译 provider
-cd apps/qtcloud-course/src/provider
-go build -o ../../../examples/default/bin/qtcloud-course-provider ./cmd/server
+1. 一个实验一个目录，自包含
+2. 原型 HTML 直接放目录里，Pages 即部署
+3. 看 [INDEX.md](INDEX.md) 找所有实验
+4. AI Agent 看 [AGENTS.md](AGENTS.md)
 
-# 编译 studio
-cd apps/qtcloud-course/src/studio
-flutter build linux --release
-rm -rf ../../../examples/default/bin/studio
-cp -r build/linux/x64/release/bundle ../../../examples/default/bin/studio
-```
+## 线上访问
 
-## 运行模拟
-
-```bash
-# 模拟用户访问 provider API
-python examples/default/src/provider_sim.py
-
-# 模拟用户使用 studio（运行测试 + 验证产物）
-python examples/default/src/studio_sim.py
-```
+`https://quanttide.github.io/quanttide-laboratory-of-course-development/<目录>/<文件>.html`
