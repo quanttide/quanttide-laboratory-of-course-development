@@ -82,25 +82,25 @@ body {
 /* ====== 步骤条 ====== */
 .steps, .stepbar {
   background:var(--surface);border-radius:var(--radius);border:1px solid var(--line);
-  padding:18px 32px;margin-bottom:20px;
+  padding:14px 22px;margin-bottom:20px;
   box-shadow:0 1px 3px rgba(0,0,0,.03);
   display:flex;align-items:center;justify-content:center;
 }
-.steps .bs, .stepbar .bs { font-size:13px;color:var(--text-3);margin-right:18px;cursor:pointer;flex-shrink:0; }
+.steps .bs, .stepbar .bs { font-size:12px;color:var(--text-3);margin-right:14px;cursor:pointer;flex-shrink:0; }
 .steps .bs:hover, .stepbar .bs:hover { color:var(--brand); }
 .steps .row, .stepbar .row { display:flex;align-items:center;gap:0; }
 .step { display:flex;align-items:center;gap:0;cursor:pointer; }
 .step .dot {
-  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:13px;flex-shrink:0;
+  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:12px;flex-shrink:0;
   background:#f1f5f9;color:#b0bec5;transition:all .2s;
 }
 .step .dot.ok, .step .dot.done { background:var(--success-soft);color:var(--success); }
 .step .dot.on, .step .dot.current { background:var(--brand);color:#fff;box-shadow:0 0 0 6px rgba(22,119,255,.08); }
-.step .lbl, .step .label { font-size:13px;font-weight:600;margin:0 10px;color:#b0bec5;white-space:nowrap; }
+.step .lbl, .step .label { font-size:12.5px;font-weight:600;margin:0 8px;color:#b0bec5;white-space:nowrap; }
 .step .lbl.ok, .step .label.done { color:var(--success); }
 .step .lbl.on, .step .label.current { color:var(--brand); }
-.step .conn, .step .line { width:24px;height:2px;background:#e8ecf2;flex-shrink:0;border-radius:1px; }
+.step .conn, .step .line { width:16px;height:2px;background:#e8ecf2;flex-shrink:0;border-radius:1px; }
 .step .conn.ok, .step .line.done { background:#bbf7d0; }
 
 /* ====== 卡片 ====== */
@@ -500,6 +500,25 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
     transparent 100%);
   height: 4px;
 }
+/* 暂未开放 */
+#view-courses .step.locked { cursor: default; }
+#view-courses .step.locked:hover { transform: none; }
+#view-courses .step.locked .step-line {
+  background: linear-gradient(90deg,
+    #B6C2D4 0%,
+    rgba(148,163,184,0.15) 85%,
+    transparent 100%);
+}
+#view-courses .step.locked .step-num { color: #B6C2D4; }
+#view-courses .step.locked .step-title { color: #8492A8; }
+#view-courses .step.locked .step-desc { color: #9AA6B8; }
+#view-courses .step.locked .step-meta { color: #B6C2D4; }
+#view-courses .step-tag {
+  display: inline-flex; align-items: center; flex-shrink: 0;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+  color: #7A879C; background: rgba(148,163,184,0.14);
+  border-radius: 3px; padding: 2px 6px; margin-left: 6px;
+}
 /* 阶梯高度 */
 #view-courses .step-1 .step-num { padding-top: 80px; }
 #view-courses .step-2 .step-num { padding-top: 60px; }
@@ -514,6 +533,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
 }
 #view-courses .step.available .step-num { color: var(--ocean-500); }
 #view-courses .step-title {
+  display: flex; align-items: center;
   font-size: 15px; font-weight: 550; margin-bottom: 4px;
 }
 #view-courses .step-desc {
@@ -814,6 +834,87 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
 #view-front .lesson-item .duration, #view-generic .lesson-item .duration {
   color: #94A0B3; margin-left: auto; font-size: 12px; font-weight: 500;
 }
+/* 课时展开 — 原地学完 */
+#view-front .lesson-wrap, #view-generic .lesson-wrap {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+}
+#view-front .lesson-wrap .lesson-item, #view-generic .lesson-wrap .lesson-item {
+  border-bottom: none;
+}
+#view-front .lesson-wrap .lesson-item:hover, #view-generic .lesson-wrap .lesson-item:hover {
+  background: rgba(74, 168, 232, 0.04);
+}
+.lesson-arrow {
+  color: #94A0B3; font-size: 11px; margin-left: 12px;
+  flex-shrink: 0; transition: transform 0.2s;
+}
+.lesson-tag {
+  display: inline-block; margin-left: 10px; padding: 1px 8px;
+  font-size: 11px; font-weight: 500; color: #B45309;
+  background: rgba(217, 119, 6, 0.10); border: 1px solid rgba(217, 119, 6, 0.25);
+  border-radius: 999px; vertical-align: 1px;
+}
+.lesson-wrap.open .lesson-arrow { transform: rotate(180deg); color: #4AA8E8; }
+.lesson-body {
+  display: none;
+  padding: 2px 0 22px 21px;
+  font-size: 13.5px; color: #43516A; line-height: 1.85;
+}
+.lesson-body.show { display: block; }
+.lesson-body .lb-lead {
+  font-size: 14px; color: #10182B; font-weight: 600; margin-bottom: 8px;
+}
+.lesson-body p { margin: 0 0 10px; }
+.lesson-body p:last-child { margin-bottom: 0; }
+.lesson-body ul { margin: 0 0 10px; padding-left: 20px; }
+.lesson-body ul:last-child { margin-bottom: 0; }
+.lesson-body li { margin-bottom: 6px; }
+.lesson-body li:last-child { margin-bottom: 0; }
+.lesson-body li strong { color: #10182B; font-weight: 600; }
+.lesson-body .lb-tip {
+  margin-top: 12px; padding: 10px 14px;
+  background: rgba(74, 168, 232, 0.06);
+  border-left: 3px solid #4AA8E8; border-radius: 6px;
+  color: #334155; font-size: 13px;
+}
+.lesson-body .lb-tip strong { color: #2464BC; }
+.lesson-body .lb-kv {
+  display: grid; grid-template-columns: auto 1fr; gap: 4px 14px;
+  margin: 0 0 10px;
+}
+.lesson-body .lb-kv b { color: #10182B; font-weight: 600; white-space: nowrap; }
+.lesson-body .lb-kv span { color: #43516A; }
+.lesson-body .lb-kv:last-child { margin-bottom: 0; }
+/* 数据卡 — 动态数据做注释 */
+.lesson-body .lb-data {
+  margin: 12px 0 14px; padding: 12px 16px;
+  background: #ffffff; border: 1px solid rgba(148, 163, 184, 0.20);
+  border-radius: 8px;
+}
+.lesson-body .lb-data-title {
+  font-size: 12px; font-weight: 600; color: #2464BC;
+  letter-spacing: 0.5px; margin-bottom: 8px;
+}
+.lesson-body .lb-data-row {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 5px 0; font-size: 12.5px; color: #64748B;
+  border-bottom: 1px dashed rgba(148, 163, 184, 0.15);
+}
+.lesson-body .lb-data-row:last-child { border-bottom: none; }
+.lesson-body .lb-data-row b { color: #10182B; font-weight: 600; text-align: right; }
+/* 本章小结 */
+.m1-summary {
+  margin-top: 20px; padding: 16px 18px;
+  background: linear-gradient(135deg, rgba(74,168,232,0.07), rgba(74,168,232,0.02));
+  border: 1px solid rgba(74, 168, 232, 0.20); border-radius: 10px;
+}
+.m1-summary .m1-summary-title {
+  font-size: 13px; font-weight: 600; color: #2464BC; margin-bottom: 10px;
+}
+.m1-summary p {
+  margin: 5px 0; font-size: 13px; color: #43516A; line-height: 1.7;
+}
+.m1-summary p b { color: #10182B; font-weight: 600; }
 /* 按钮 — 跟 v4 首页统一 */
 #view-front .btn-filled, #view-generic .btn-filled {
   background: #2464BC; color: #fff;
@@ -915,33 +1016,33 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
       <!-- 五步课程阶梯 -->
       <div class="course-path">
 
-        <div class="step step-1 available" onclick="enterCourse('knowledge-work')">
+        <div class="step step-1 locked">
           <span class="step-num">01</span>
-          <span class="step-title">知识工作</span>
+          <span class="step-title">知识工作<span class="step-tag">暂未开放</span></span>
           <p class="step-desc">信息检索、结构化整理、多源交叉验证。学会找到任何答案的方法。</p>
           <span class="step-meta">8课时 · 初级</span>
           <span class="step-line"></span>
         </div>
 
-        <div class="step step-2 available" onclick="enterCourse('vibe-coding')">
+        <div class="step step-2 locked">
           <span class="step-num">02</span>
-          <span class="step-title">氛围编程</span>
+          <span class="step-title">氛围编程<span class="step-tag">暂未开放</span></span>
           <p class="step-desc">Vibe Coding × 结构化重构。AI 是编程搭档，代码是思考的副产品。</p>
           <span class="step-meta">12 课时 · 初级</span>
           <span class="step-line"></span>
         </div>
 
-        <div class="step step-3 available" onclick="enterCourse('big-data')">
+        <div class="step step-3 locked">
           <span class="step-num">03</span>
-          <span class="step-title">大数据导论</span>
+          <span class="step-title">大数据导论<span class="step-tag">暂未开放</span></span>
           <p class="step-desc">数据管道全景、SQL 工程化写法、ETL 思维训练。</p>
           <span class="step-meta">10 课时 · 中级</span>
           <span class="step-line"></span>
         </div>
 
-        <div class="step step-4 available" onclick="enterCourse('data-engineering')">
+        <div class="step step-4 locked">
           <span class="step-num">04</span>
-          <span class="step-title">数据工程</span>
+          <span class="step-title">数据工程<span class="step-tag">暂未开放</span></span>
           <p class="step-desc">真实数据集 × 工业级工具链。完整的工程实践训练。</p>
           <span class="step-meta">14课时 · 中高级</span>
           <span class="step-line"></span>
@@ -1016,15 +1117,15 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
       <div class="steps" id="stepbar" style="display:none">
         <a class="bs" href="javascript:showModule('overview')">← 课程首页</a>
         <div class="row">
-          <div class="step" onclick="showModule('m1')"><div class="dot ok" id="sn1">✓</div><span class="lbl ok" id="sl1">量潮是谁</span></div>
+          <div class="step" onclick="showModule('m1')"><div class="dot ok" id="sn1">✓</div><span class="lbl ok" id="sl1">认识量潮</span></div>
           <div class="conn ok" id="sline1"></div>
-          <div class="step" onclick="showModule('m2')"><div class="dot" id="sn2">2</div><span class="lbl" id="sl2">业务与市场</span></div>
+          <div class="step" onclick="showModule('m2')"><div class="dot" id="sn2">2</div><span class="lbl" id="sl2">理解业务</span></div>
           <div class="conn" id="sline2"></div>
-          <div class="step" onclick="showModule('m3')"><div class="dot on" id="sn3">3</div><span class="lbl on" id="sl3">工作方法论</span></div>
+          <div class="step" onclick="showModule('m3')"><div class="dot on" id="sn3">3</div><span class="lbl on" id="sl3">学会做事</span></div>
           <div class="conn" id="sline3"></div>
-          <div class="step" onclick="showModule('m4')"><div class="dot" id="sn4">4</div><span class="lbl" id="sl4">最新方向</span></div>
+          <div class="step" onclick="showModule('m4')"><div class="dot" id="sn4">4</div><span class="lbl" id="sl4">发现机会</span></div>
           <div class="conn" id="sline4"></div>
-          <div class="step" onclick="showModule('m5')"><div class="dot" id="sn5">5</div><span class="lbl" id="sl5">微型创业</span></div>
+          <div class="step" onclick="showModule('m5')"><div class="dot" id="sn5">5</div><span class="lbl" id="sl5">Sell Your Demo</span></div>
         </div>
       </div>
 
@@ -1036,9 +1137,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
           <div class="v4-card">
             <div class="v4-badge" id="v4-badge">🏭 生产实习 · 微型创业</div>
             <div class="v4-title" id="v4-title">量潮课堂 · <em>实训基地</em></div>
-            <p class="v4-desc" id="v4-desc">量潮是"总部"，你是"分公司"——我们不给你出题，你<strong>自己给自己出题</strong>。用前 4 个模块了解公司，找到盲区，做一个微型创业 demo <strong>sale 给总部</strong>。同一套评分，不同分数线：课程 60 分及格，招聘 90 分录用。</p>
+            <p class="v4-desc" id="v4-desc">量潮是"总部"，你是"分公司"——用前 4 个模块形成你自己的商业判断：发现一个值得验证的机会，用两周做出可体验的 Demo，<strong>说服总部下注</strong>。这不是交作业：我们不给题目，但要求你证明自己能发现问题、形成假设、快速验证，并根据证据更新判断。</p>
             <div class="v4-meta" id="v4-meta">
-              <span>📚 5 个模块</span><span>⏱ 预计 2 周</span><span>👤 38 人在学</span><span>🎯 同一套卷子，不同分数线</span>
+              <span>📚 5 个模块</span><span>⏱ 预计 2 周</span><span>👤 38 人在学</span><span>🎯 机会验证 · 向总部下注</span>
             </div>
             <div class="v4-progress">
               <div class="v4-progress-label"><span>学习进度</span><span id="v4-progress-pct">20%</span></div>
@@ -1055,12 +1156,89 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
       <!-- 模块1 -->
       <div class="module-panel" id="mod-m1">
         <div class="ocean-bg"><div class="ocean-img"></div><div class="ocean-fade"></div></div>
-        <div class="card"><h2>📖 一、量潮是谁</h2><p class="subtitle">了解你所在的组织——它的起源、结构与核心业务</p>
+        <div class="card"><h2>📖 一、量潮是谁</h2><p class="subtitle">在开始学习之前，先理解量潮是怎样一家公司，以及为什么量潮会做课堂。点击下方课时，展开即可学习。</p>
           <hr class="horizon">
-          <div class="lesson-item" style="cursor:pointer" onclick="alert('课程内容将在平台上线后开放。\n\n届时将包含：量潮的创立故事、创始团队背景、公司发展历程中的关键决策。')"><span class="ldot done"></span>1.1 量潮的创立故事<span class="duration">阅读 10 min</span></div>
-          <div class="lesson-item" style="cursor:pointer" onclick="alert('课程内容将在平台上线后开放。\n\n届时将包含：组织架构图、各团队职责、协作模式介绍。')"><span class="ldot done"></span>1.2 组织架构与团队分工<span class="duration">阅读 8 min</span></div>
-          <div class="lesson-item" style="cursor:pointer" onclick="alert('课程内容将在平台上线后开放。\n\n届时将包含：量潮云 vs 量潮课堂的定位差异、技术架构概览。')"><span class="ldot"></span>1.3 量潮云 + 量潮课堂：两大产品线<span class="duration">视频 15 min</span></div>
-          <div class="lesson-item" style="cursor:pointer" onclick="alert('课程内容将在平台上线后开放。\n\n届时将包含：与浙理工的合作模式、产教融合的具体案例。')"><span class="ldot"></span>1.4 我们服务谁：浙理工合作案例<span class="duration">阅读 10 min</span></div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l11')"><span class="ldot done"></span>1.1 我们从哪里来：量潮的创立故事<span class="duration">阅读 10 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l11">
+              <div class="lb-lead">量潮不是"做出来的公司"，而是从一个真实研究课题里长出来的。</div>
+              <p>量潮的源头，可以追溯到 <strong>2016 年在厦门大学王亚南经济研究院（WISE）成立的本科生课题组——China's Prices Project（CPP）</strong>。创始人是 WISE 经济学国际化试点班 2014 级本科生张果。</p>
+              <p>课题组当时在做的课题，是参考 MIT 的 Billion Prices Project，用爬虫技术采集电商平台商品价格，编制"中国线上价格指数"（线上 CPI / iCPI）。这个课题真正塑造量潮的，不是某个技术，而是它一开始就"以真实问题驱动、以数据为研究对象、用工程方法解决，并把过程公开记录"。</p>
+              <ul>
+                <li><strong>2016</strong> — 源头：在厦大成立课题组，用爬虫 + 数据工程解决真实的线上价格指数问题</li>
+                <li><strong>2017</strong> — 转折：公开发布《CPP 3.0：从课题组到科技公司》，开始主动思考公司化</li>
+                <li><strong>2018</strong> — 成立：注册成立厦门量潮科技有限公司</li>
+                <li><strong>此后</strong> — 生长：科研服务逐渐沉淀出课程、咨询与软件产品</li>
+              </ul>
+              <p>我们的名字"量潮"，寓意<strong>"引领定量分析时代潮流"</strong>。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>量潮是从厦大一个真实研究课题里长出来的公司——"问题驱动、数据驱动、工程驱动"从第一天起就在它的基因里。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l12')"><span class="ldot"></span>1.2 量潮到底在做什么<span class="duration">阅读 15 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l12">
+              <div class="lb-lead">围绕同一套数据与工程能力，同时做项目、育人才、做咨询、造工具。</div>
+              <p>与其用"部门图"理解量潮，不如看它掌握了哪几种能力。量潮的四种能力处理不同的问题，却共用同一个内核——数据和工程：</p>
+              <div class="lb-kv"><b>数据</b><span>解决真实的数据问题——科研数据服务：数据采集、清洗、文本挖掘</span></div>
+              <div class="lb-kv"><b>课堂</b><span>把能力变成人才培养——产教融合课程、微专业、生产实习</span></div>
+              <div class="lb-kv"><b>咨询</b><span>把方法用于企业问题——创新咨询、创业咨询</span></div>
+              <div class="lb-kv"><b>云</b><span>把重复能力产品化——DevOps 工具链、数据云、支付云</span></div>
+              <p>它们形成一个闭环：<strong>科研服务产生真实问题 → 方法与工程实践 → 沉淀为课程（培养人）与云工具（沉淀技术）→ 反过来支撑新的真实项目</strong>。</p>
+              <p>举个具体的例子——<strong>量潮云</strong>。公司长期在做软件发布，流程重复且容易出错，于是把发布规则一条条整理出来，写成了开源工具 <strong>qtcloud-devops</strong>（一个自动化发布命令行工具，用 Rust 编写）。自己的项目先用起来，再逐渐打磨成可复用的产品。这就是"沉淀技术"最朴素的样子。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>量潮围绕同一套数据与工程能力，同时做项目、育人才、做咨询、造工具——科研服务产生真实问题，课堂培养解决问题的人，云把重复方案沉淀成工具。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l13')"><span class="ldot done"></span>1.3 量潮是怎么组织起来做这些事的<span class="duration">阅读 8 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l13">
+              <div class="lb-lead">不靠一张"部门图"，靠一套能自我运转的方式。</div>
+              <p>量潮的业务资产、开源仓库、课程与工具仍在快速演化，不太适合被画成一张固定的组织架构图。更稳定的理解方式是<strong>看它怎么运转</strong>：</p>
+              <ul>
+                <li><strong>围绕能力组织，而不是围绕部门</strong> — 数据 / 课堂 / 咨询 / 云四种能力相互咬合，各自解决什么问题很清楚</li>
+                <li><strong>真实项目带路</strong> — 先有真实需求，再长出方法、课程与工具，而不是先设计好组织再找事做</li>
+                <li><strong>扁平、自组织</strong> — 团队规模小、信任氛围好；为了赶客户截止时间，团队几乎独立"发明"了自己的工作流程，创始人从一线退下后，新人也能在几天内接手一套新工作方法</li>
+                <li><strong>用制度代替人治</strong> — 把发布流程、验收机制、考核标准显式写成规则，让"能力"沉淀在系统里，而不是个人身上</li>
+                <li><strong>客户与项目对接</strong> — 由项目经理 / 商务经理牵头，内部管理负责人与技术负责人参与设计与验收</li>
+                <li><strong>实训基地</strong> — 在量潮创新联盟旗下运营"助研 / 创赛 / 技术"三类，是组织培养人才的延伸</li>
+              </ul>
+              <div class="lb-tip"><strong>一句话记忆：</strong>量潮不用"部门图"定义自己，而用"能不能解决真实问题"来组织——做真实项目 → 沉淀方法 → 做成课程和工具 → 培养新人 → 再解决新的问题。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l14')"><span class="ldot"></span>1.4 一个真实案例：浙江理工大学<span class="duration">阅读 10 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l14">
+              <div class="lb-lead">从一门《生产实习》课程开始，长成一个持续深化的大数据课程体系。</div>
+              <p>量潮与浙江理工大学围绕大数据相关课程开展持续校企合作，合作从单门课程逐渐扩展到课程体系建设、生产实习和企业导师参与。创始人张果担任浙理工计算机系企业导师，主导课程设计与授课。</p>
+              <ul>
+                <li><strong>一门课起步</strong> — 2024 年底与浙理工计算机系开设《生产实习》教学实习课程</li>
+                <li><strong>长成体系</strong> — 合作扩展到《大数据导论》《数据工程》《数据科学》等课程与《大数据微专业》</li>
+                <li><strong>议事型课堂</strong> — 把企业周会决策流程搬进课堂，以真实商业难题为案例，训练解决问题的"元能力"</li>
+                <li><strong>从"拧螺丝钉"到"参与真实生产"</strong> — 学生自主选题、自主执行、向"总部"Sale，复用企业验收机制考核</li>
+              </ul>
+              <div class="lb-data">
+                <div class="lb-data-title">📊 截至 2026 年 · 数据速览（内部口径，持续更新）</div>
+                <div class="lb-data-row"><span>合作课程</span><b>6 门</b></div>
+                <div class="lb-data-row"><span>累计开课</span><b>10+ 次</b></div>
+                <div class="lb-data-row"><span>合作方式</span><b>课程建设 + 生产实习 + 企业导师</b></div>
+                <div class="lb-data-row"><span>合作年份</span><b>2024 — 2026</b></div>
+              </div>
+              <p>为什么我们讲这个案例？因为它是量潮"产教融合"如何落地的样板：<strong>课堂里训练什么，实习就要求什么；实习里要求什么，招聘就考察什么</strong>。换句话说，教学、实习和招聘逐渐使用"同一套卷子"。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>量潮课堂里学的东西，不是脱离业务的"课程知识"，而是量潮真实工作方式的一部分——你将来要面对的要求，和量潮自己人面对的一样。</div>
+            </div>
+          </div>
+
+          <div class="m1-summary">
+            <div class="m1-summary-title">📌 本章小结 · 记住这四件事</div>
+            <p><b>1.1 量潮从哪里来？</b>从厦门大学的真实研究课题中长出来。</p>
+            <p><b>1.2 量潮解决什么问题？</b>围绕数据和工程，解决科研、教学与企业中的真实问题。</p>
+            <p><b>1.3 量潮是怎么工作的？</b>做真实项目 → 沉淀方法 → 做成课程和工具 → 培养新人 → 再解决新问题。</p>
+            <p><b>1.4 我为什么需要知道这些？</b>因为你在量潮课堂学到的东西，正是这家公司真实工作方式的一部分。</p>
+          </div>
+
           <hr class="horizon-sm">
           <div style="display:flex;gap:var(--sp-3)"><button class="btn btn-filled" onclick="showModule('m2')">→ 下一模块</button></div>
         </div>
@@ -1069,12 +1247,68 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
       <!-- 模块2 -->
       <div class="module-panel" id="mod-m2">
         <div class="ocean-bg"><div class="ocean-img"></div><div class="ocean-fade"></div></div>
-        <div class="card"><h2>🏢 二、业务与市场</h2><p class="subtitle">理解量潮课堂的商业模式、目标用户与竞争定位</p>
+        <div class="card"><h2>🏢 二、量潮课堂为什么存在</h2><p class="subtitle">为什么一家数据科技公司要办课堂——量潮课堂为什么存在。点击下方课时，展开即可学习。</p>
           <hr class="horizon">
-          <div class="lesson-item" style="cursor:pointer"><span class="ldot"></span>2.1 产教融合：我们的核心模式<span class="duration">阅读 15 min</span></div>
-          <div class="lesson-item" style="cursor:pointer"><span class="ldot"></span>2.2 课程收入的背后：创新成果的系统性收集<span class="duration">阅读 12 min</span></div>
-          <div class="lesson-item" style="cursor:pointer"><span class="ldot"></span>2.3 用户画像：招聘候选人 / 在校学生 / 付费学员<span class="duration">阅读 10 min</span></div>
-          <div class="lesson-item" style="cursor:pointer"><span class="ldot"></span>2.4 规模化路径：从实训基地到开放平台<span class="duration">阅读 8 min</span></div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l21')"><span class="ldot"></span>2.1 产教融合：量潮课堂为什么存在<span class="duration">阅读 15 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l21">
+              <div class="lb-lead">量潮课堂建立在一种"产教融合"思路上：真实业务产生问题、案例和工程经验，再把这些经验转化为课程和人才培养。</div>
+              <p>先说明一点：这是量潮<strong>目前对自身业务循环的一种理解</strong>，而不是一条被验证完毕的定律——它正在被实践持续检验。按这种理解，真实项目提供问题与方法论，课堂把这些经验转化为课程，培养出的学生再回到真实项目中。</p>
+              <ul>
+                <li><strong>企业授课</strong> — 作为浙江理工大学大数据微专业的官方企业授课单位，把一线工程规范带进课堂，开设《大数据技术》《大数据项目实践》等专业课</li>
+                <li><strong>议事型课堂</strong> — 把企业周会决策流程搬进教学，以已解决的真实商业难题为案例，训练解决问题的"元能力"</li>
+                <li><strong>实训基地</strong> — 与高校老师联合运营产学研一体化平台，分"助研 / 创赛 / 技术"三类</li>
+                <li><strong>生产实习</strong> — 学生参与真实生产流程（自主选题 → 执行 → 向总部 Sale），而非只做"拧螺丝钉"式的数据处理</li>
+              </ul>
+              <p>这条思路的根基是：课程里讲的每一个案例，都来自量潮真实跑过的项目；课上练的每一道题，都可能对应一个真实需求。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>先有真实业务，再把它变成课程；课程又反哺业务的人才池。教学不是副业，它倒逼我们把"做得不错"变成"说得清楚"。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l22')"><span class="ldot"></span>2.2 课堂为什么不只是一门课：人才、案例与知识资产<span class="duration">阅读 12 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l22">
+              <div class="lb-lead">课程的价值不只有学费，还包括人才发现、案例积累和方法迭代。</div>
+              <p>课程确实有定价：微专业全套 <strong>4188 元</strong>，一对一 Vibe Coding 课程 <strong>1000 元/小时</strong>（在校学生 500 元/小时）。但在量潮的账本上，一门课的价值远不止学费，还包括三种"外部性"：</p>
+              <ul>
+                <li><strong>人才沉淀</strong> — 课堂允许我们更长期、更真实地观察一个人的能力：沟通方式、遇到问题的反应、完成工作的质量。对认可的工作成果，量潮还会发放标准化推荐信，给求职者真实的企业背书</li>
+                <li><strong>案例沉淀</strong> — 好的课程成果，可以在<strong>获得授权的前提下</strong>进一步整理为教学案例（选题、Demo、方法），成为公司和下一届学员共用的素材</li>
+                <li><strong>方法沉淀</strong> — 学生遇到的新问题，反过来推动课程、工具和方法升级——教的过程本身也在逼公司把话说清楚</li>
+              </ul>
+              <p>关于考核标准，量潮希望<strong>逐渐让教学评价与招聘评价使用同一套能力标准，只是要求深度不同</strong>。例如：课程要求达到"能够完成"，招聘可能要求达到"能够独立、高质量完成"。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>课程的价值不只有学费，还包括人才发现、案例积累和方法迭代——这是它作为"系统"而不是"一门课"的原因。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l23')"><span class="ldot"></span>2.3 谁在上课：三类学习者的真实画像<span class="duration">阅读 10 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l23">
+              <div class="lb-lead">用户画像不是"分群"，而是能回答"他是谁、为什么来、为什么选量潮"。</div>
+              <div class="lb-kv"><b>在校学生</b><span>已经学过编程或数据课程，但缺少完整真实项目；不知道企业到底如何验收工作。最大的痛点是没有"能讲清楚的作品"。选量潮，是因为这里给的是真实项目 + 企业验收标准</span></div>
+              <div class="lb-kv"><b>招聘候选人</b><span>希望进入量潮，但简历不足以证明实际能力。最大的痛点是"能力无法被证明"。选量潮，是因为考核期就用真实任务证明自己，且考核期间可获得培训资源与标准化推荐信</span></div>
+              <div class="lb-kv"><b>高客单个人学员</b><span>已经能使用 AI 工具，但卡在"知道工具、不会构造工作流"。愿意为高密度反馈和个性化指导付费，选量潮的一对一 Vibe Coding 课（按小时计费）</span></div>
+              <p>课堂之外，量潮还服务两类 B 端客户：<strong>高校经管科研团队</strong>（数据清洗、文本挖掘等科研数据服务）和<strong>中小高新科技企业</strong>（企业数据咨询、解决方案）。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>三类人为什么选量潮？因为这里提供的不是"课程"，而是"能证明能力的真实机会"——这正是简历和证书给不了的东西。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l24')"><span class="ldot"></span>2.4 能力规模化：从实训基地到开放平台<span class="duration">阅读 8 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l24">
+              <div class="lb-lead">规模化不是多招老师、多招工程师，而是让同样质量的工作不再依赖某一个人。</div>
+              <ul>
+                <li><strong>实训基地阶梯</strong> — 助研项目（科研入门训练营）→ 实训生计划（深度实践阶段），层层筛选培养</li>
+                <li><strong>产品化</strong> — 把非标的数据服务拆成可预测、可复制的标准化交付（数据蓝图 / 数据集 / 数据报告）</li>
+                <li><strong>工具化</strong> — 把工程实践沉淀为开源工具（qtcloud-devops 等），发布到 GitHub 组织 quanttide</li>
+                <li><strong>内容"左移"</strong> — 课程内容不断前置降级（当前实践课标准 = 之前生产实习标准），保持业界领先</li>
+                <li><strong>Build in Public</strong> — 开源公司可公开的文档与代码，降低信任成本，吸引共创者</li>
+              </ul>
+              <p>这条路径的核心，是把"少数人手里的能力"沉淀为"可复制、可规模化的系统"——让同样质量的工作，不再依赖某一个具体的人。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>人的经验 → 标准 → 工具 → 平台。规模化的本质不是加人，而是让能力离开个人、进入系统。</div>
+            </div>
+          </div>
+
           <hr class="horizon-sm">
           <div style="display:flex;gap:var(--sp-3)"><button class="btn btn-filled" onclick="showModule('m3')">→ 下一模块</button></div>
         </div>
@@ -1083,12 +1317,84 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
       <!-- 模块3 -->
       <div class="module-panel" id="mod-m3">
         <div class="ocean-bg"><div class="ocean-img"></div><div class="ocean-fade"></div></div>
-        <div class="card"><h2>🔧 三、工作方法论</h2><p class="subtitle">量潮是怎么做事的——你可以直接复用这些方法</p>
+        <div class="card"><h2>🔧 三、工作方法论</h2><p class="subtitle">量潮是怎么做事的——这些方法你马上就能直接复用。点击下方课时，展开即可学习。</p>
           <hr class="horizon">
-          <div class="lesson-item" style="cursor:pointer"><span class="ldot"></span>3.1 从原型到成品：快速开发流程<span class="duration">视频 20 min</span></div>
-          <div class="lesson-item" style="cursor:pointer"><span class="ldot"></span>3.2 知识工程入门（Baby 版教程）<span class="duration">阅读 15 min</span></div>
-          <div class="lesson-item" style="cursor:pointer"><span class="ldot"></span>3.3 Web Coding 基础入门<span class="duration">阅读 12 min</span></div>
-          <div class="lesson-item" style="cursor:pointer"><span class="ldot"></span>3.4 工作日志 + 复盘方法论<span class="duration">阅读 8 min</span></div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l31')"><span class="ldot"></span>3.1 从原型到成品：快速开发流程<span class="duration">阅读 15 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l31">
+              <div class="lb-lead">先用原型快速验证想法，再用确定性规则把流程固化，最后让 AI 参与判断。</div>
+              <p>量潮做开发的节奏是<strong>"原型先行"</strong>：先把想法快速变成一个能看、能用的原型，验证之后再打磨成成品。原型的目的不是"做得快"，而是<strong>尽快把抽象判断变成可以验证的东西</strong>——用最小成本检验想法是否值得继续。</p>
+              <p>一个想法从原型走向成品的完整循环是：</p>
+              <ul>
+                <li><strong>原型</strong> — 用最小成本把想法变成可验证的东西</li>
+                <li><strong>验证</strong> — 判断方向对不对，值得不值得继续投入</li>
+                <li><strong>重构</strong> — 保留对的，调整错的，逐步打磨质量</li>
+                <li><strong>自动化</strong> — 把重复步骤写成规则（以软件发布为例：核对版本号与 CHANGELOG → 打 Git Tag → 发 Release → 触发 CI/CD 自动构建分发）</li>
+                <li><strong>产品化</strong> — 让这套流程能复用于同类工作</li>
+              </ul>
+              <p>这套哲学叫<strong>"先造围栏，再上智能体"</strong>：高确定性的事用规则引擎固定，越往上不确定性越强，越需要 AI 介入判断——就像盖楼，AI 的认知能力在一层层构建中被逐步推高。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>原型 → 验证 → 重构 → 自动化 → 产品化。原型的意义不是快，而是把抽象判断变成可以验证的东西。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l32')"><span class="ldot"></span>3.2 知识工程入门（Baby 版教程）<span class="duration">阅读 15 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l32">
+              <div class="lb-lead">知识不是"记在脑子里"，而是像代码一样被结构化、被版本化、被复用。</div>
+              <p>量潮把知识当工程来做：公司可公开的文档、代码、工作方法，全部开源到 GitHub；内部还有"第二大脑"式的知识系统（创始人工作记忆、公司知识库）。为什么要这么认真？因为<strong>知识只有在"能被检索、能被复用、能被交接"时，才真正成为资产</strong>。</p>
+              <p>入门只需要三步：</p>
+              <ul>
+                <li><strong>记录</strong> — 把做了什么、为什么这么做写下来。这是工作日志的起点</li>
+                <li><strong>结构化</strong> — 用固定模板（问题 / 方法 / 结果 / 反思）组织，让它能被检索</li>
+                <li><strong>复用</strong> — 让知识跨时间、跨人员继续发挥作用。这是知识工程的最终目的</li>
+              </ul>
+              <p>公开是一种<strong>可选的传播方式</strong>，而不是必经步骤：有的知识适合 GitHub 公开（能倒逼你把"做得不错"变成"说得清楚"），有的适合内部共享，有的必须保密——商业秘密、个人信息、客户合同限制，都要守好边界。</p>
+              <p>这份《知识工程入门》有面向非技术岗位的 Baby 版教程——<strong>不懂编程也能开始</strong>，用的就是上面的三步。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>记录 → 结构化 → 复用，能公开的再公开。知识工程的起点不是工具，而是"把经验写下来"这个习惯。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l33')"><span class="ldot"></span>3.3 Web Coding 基础入门<span class="duration">阅读 12 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l33">
+              <div class="lb-lead">AI 是编程搭档，代码是思考的副产品。</div>
+              <p>量潮倡导的 Web Coding（Vibe Coding），不是"让 AI 替你写代码"，而是<strong>人和 AI 结对</strong>：你用自然语言描述意图，AI 生成初稿，你负责判断和重构。</p>
+              <ul>
+                <li><strong>以重构为中心</strong> — 把 AI 生成的"毛坯房"代码，逐层升级为"精装房"。中间最重要的动作是持续重构</li>
+                <li><strong>代码是思考的副产品</strong> — 真正值钱的是你对问题的理解，代码只是表达；理解到位了，代码自然会好</li>
+                <li><strong>沉淀 Prompt 与工作流</strong> — 好的提问习惯和协作 Workflow，比单次生成结果更重要</li>
+              </ul>
+              <p>这套方法取材于公司日常的研发心得，配套于大数据系列课程，也是量潮对每个新人的基础要求。AI 降低了"写出代码"的门槛，但提高了"判断代码是否正确"的重要性——你仍然需要持续检查、测试、编辑 AI 的输出，并决定什么时候该人工介入。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>AI 负责提高产出速度，人负责定义问题、判断结果和保证质量——不是"让 AI 写"，而是"和 AI 一起写"。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l34')"><span class="ldot"></span>3.4 工作日志 + 复盘方法论<span class="duration">阅读 8 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l34">
+              <div class="lb-lead">把每天的工作写下来，是量潮沉淀能力的最小单位。</div>
+              <p>工作日志记录<strong>"做了什么、为什么、结果如何"</strong>；复盘在此基础上多问一句<strong>"哪里可以更好、下一次怎么做"</strong>。量潮把"工作日志 + 复盘"做成标准模板，让经验能从个人身上流到组织里。</p>
+              <p>复盘只需要三问：</p>
+              <ul>
+                <li><strong>目标是什么？</strong>结果符合预期吗？</li>
+                <li><strong>哪里做得好，哪里出了问题？</strong></li>
+                <li><strong>下一次，哪一步可以不同？</strong></li>
+              </ul>
+              <p>这套方法还和量潮引入的 <strong>OODA 循环</strong>（观察 → 判断 → 决策 → 行动）配套：快速感知变化、做出决策，再把反馈变成下一步动作。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>工作日志不是汇报工具，而是给未来的自己和协作者留下上下文；复盘让"经验"变成"方法"——这是你每天都能做的最小能力投资。</div>
+            </div>
+          </div>
+
+          <div class="m1-summary">
+            <div class="m1-summary-title">📌 本章小结 · 把它们串成一个工作循环</div>
+            <p><b>3.1 怎么快速出成品？</b>原型 → 验证 → 重构 → 自动化 → 产品化，尽快把判断变成可验证的东西。</p>
+            <p><b>3.2 知识怎么沉淀？</b>记录 → 结构化 → 复用，能公开的再公开。</p>
+            <p><b>3.3 怎么和 AI 协作？</b>AI 提高产出速度，人负责定义问题、判断结果和保证质量。</p>
+            <p><b>3.4 怎么持续进步？</b>工作日志给未来留上下文，复盘把反馈变成下一步动作。</p>
+            <p>这四节不是四个并列方法，而是同一个循环：<b>快速行动 → AI 协作 → 记录过程 → 复盘 → 沉淀为组织知识</b>。</p>
+          </div>
+
           <hr class="horizon-sm">
           <div style="display:flex;gap:var(--sp-3)"><button class="btn btn-filled" onclick="showModule('m4')">→ 下一模块</button></div>
         </div>
@@ -1097,12 +1403,91 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
       <!-- 模块4 -->
       <div class="module-panel" id="mod-m4">
         <div class="ocean-bg"><div class="ocean-img"></div><div class="ocean-fade"></div></div>
-        <div class="card"><h2>💡 四、最新探索方向</h2><p class="subtitle">公司当前在想什么、往哪走——理解这些，你才能找到自己的切入点</p>
+        <div class="card"><h2>💡 四、量潮正在探索什么</h2><p class="subtitle">公司正在试着成为什么——而不是"已经是什么"。点击下方课时，展开即可学习。</p>
           <hr class="horizon">
-          <div class="lesson-item" style="cursor:pointer" onclick="alert('课程内容将在平台上线后开放。\n\n届时将包含：\n• Build in Public 战略——为什么我们把所有仓库、日记、章程全部公开\n• 公开不是放弃护城河，是把信任成本砍掉\n• 一个循环（需求→处理→交付→记录→传播）所有业务通用')"><span class="ldot"></span>4.1 Build in Public：为什么要全部公开<span class="duration">阅读 15 min</span></div>
-          <div class="lesson-item" style="cursor:pointer" onclick="alert('课程内容将在平台上线后开放。\n\n届时将包含：\n• 同一个内核（数据工程能力）× 四个投射方向（数据/课堂/咨询/云）\n• 四条业务线之间的传动链条\n• 管理层怎么用"互搏"检验内核标准化程度')"><span class="ldot"></span>4.2 多业务平衡：一个内核，四个方向<span class="duration">阅读 18 min</span></div>
-          <div class="lesson-item" style="cursor:pointer" onclick="alert('课程内容将在平台上线后开放。\n\n届时将包含：\n• 核心竞争力不是你宣称的优势，是客户对比后发现只有你能解决的问题\n• 如何找到它：同行调研 → 客户痛点 → 交叉对比')"><span class="ldot"></span>4.3 发现核心竞争力<span class="duration">阅读 12 min</span></div>
-          <div class="lesson-item" style="cursor:pointer" onclick="alert('课程内容将在平台上线后开放。\n\n届时将包含：\n• 公司从"人治"向"法治"转变\n• 矩阵式组织架构、公司代表大会制度、透明化经营\n• 制度的最终目的是保护温情')"><span class="ldot"></span>4.4 制度创新实验室：规则保护温情<span class="duration">阅读 10 min</span></div>
+          <div class="lb-tip" style="margin-bottom:14px"><strong>先说清楚：</strong>这一章不是"量潮已经是什么"，而是"量潮目前正在试着成为什么"。这里的判断可能随着实践继续变化——正因为这些方向还在迭代，它们才值得你带着观察去学，而不是当作结论去背。</div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l41')"><span class="ldot"></span>4.1 Build in Public：为什么尽可能公开<span class="duration">阅读 15 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l41">
+              <div class="lb-lead">公开不是放弃护城河，而是把信任成本砍掉。</div>
+              <p>量潮"尽可能公开"——文档、代码、工作方法、甚至不少决策过程，都开源到 GitHub 组织 <strong>quanttide</strong>。这在大多数公司看来很反常，但量潮的理由非常实际：</p>
+              <ul>
+                <li><strong>信任成本最低</strong> — 客户、学生、候选人看到你的真实工作方式，比任何宣传都可信</li>
+                <li><strong>吸引共创者</strong> — 透明会吸引认同这套工作方式的人加入（员工、学员、合作者）</li>
+                <li><strong>倒逼质量</strong> — 能被公开的东西，必须经得起审视</li>
+              </ul>
+              <p>但要强调：量潮实行的是一种<strong>"尽可能公开、但存在边界"</strong>的策略，而不是无条件公开。成熟的 Build in Public 不是"什么都公开"，而是知道<strong>什么应该公开、什么时候公开、公开到什么粒度</strong>。至少这些不公开：</p>
+              <ul>
+                <li>客户数据与个人信息</li>
+                <li>商业秘密与未授权成果</li>
+                <li>账号密钥与基础设施凭据</li>
+                <li>受合同 / NDA 限制的信息</li>
+              </ul>
+              <p>这套做法背后是一个通用循环：<strong>需求 → 处理 → 交付 → 记录 → 传播</strong>——所有业务都走同一个循环，而"记录与传播"正是把每次工作变成公共资产的一步。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>Build in Public 不是情怀，是策略——用透明换信任，用公开倒逼质量，但要永远清楚"哪些不能公开"。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l42')"><span class="ldot"></span>4.2 多业务平衡：一个内核，四个方向<span class="duration">阅读 18 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l42">
+              <div class="lb-lead">数据、课堂、咨询、云看起来是四件事，其实是一个内核。</div>
+              <p>量潮的多业务，目前的理解是<strong>同一个内核 × 四个投射方向</strong>：四个方向是——数据（做真实项目）、课堂（培养人才）、咨询（解决企业问题）、云（把重复方案做成工具）。它们共享方法论、共享案例库、共享人才池。</p>
+              <p>但"内核到底是什么"，量潮自己也还在验证。历史上它一直是<strong>数据工程能力</strong>；可随着咨询、制度设计、组织方法、知识工程、AI Coding、课程设计的加入，一个更有扩张性的候选正在浮现——<strong>"把非结构化经验，沉淀为数据、规则、工具和课程的能力"</strong>。这是目前正在被检验的判断，而不是结论。</p>
+              <p>四条业务线之间的"传动链条"是：</p>
+              <ul>
+                <li><strong>项目</strong>产生真实问题与方法 →</li>
+                <li><strong>方法</strong>沉淀为课程与工具 →</li>
+                <li><strong>课程</strong>培养出人才、<strong>工具</strong>降低重复成本 →</li>
+                <li><strong>人才与工具</strong>反哺下一个项目</li>
+              </ul>
+              <p>管理层会用<strong>"互搏"</strong>来检验内核的标准化程度：同一个内核能不能同时支撑多个业务？如果能，说明它真的被沉淀成了标准，而不是某个人的经验。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>一个内核 × 四个方向，靠"传动链条"互相输血，靠"互搏"检验标准——而"内核到底是什么"，是一个仍在验证的开放问题。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l43')"><span class="ldot"></span>4.3 我们还在寻找什么是真正的核心竞争力<span class="duration">阅读 12 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l43">
+              <div class="lb-lead">核心竞争力不是你宣称的优势，而是客户对比后"只有你能解决"的问题。</div>
+              <p>这一节我们不替公司下结论，而是列出正在被检验的<strong>候选答案</strong>——它们目前都还算不上被验证的护城河，只是量潮在与客户的对比中观察到的可能支点：</p>
+              <div class="lb-kv"><b>候选 A · 人才循环</b><span>背靠高校，有充足的学生人才提供多元想法与足量支持——但高校合作很多公司也能做</span></div>
+              <div class="lb-kv"><b>候选 B · 科研数据工程经验</b><span>已完成相关方向十余个完整项目，且每次项目都有完整记录与总结——但经验可以被对手积累</span></div>
+              <div class="lb-kv"><b>候选 C · 知识工程与标准化能力</b><span>把经验沉淀为课程、工具和规则，而不是留在个人手里</span></div>
+              <div class="lb-kv"><b>候选 D · 产教融合闭环</b><span>数据—人才—工具互相反哺，形成别人难以复制的系统</span></div>
+              <p>真正的判断标准只有一个：<strong>客户对比之后，发现只有你能解决的问题</strong>。你参与项目时观察到的"客户为什么选我们"，正是量潮检验核心竞争力的重要证据——欢迎你把观察带回来。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>核心竞争力 = 客户对比后只有你能解决的问题。目前是四个候选，等待真实业务来验证。</div>
+            </div>
+          </div>
+
+          <div class="lesson-wrap">
+            <div class="lesson-item" style="cursor:pointer" onclick="toggleLesson('l44')"><span class="ldot"></span>4.4 制度创新实验室：规则保护温情<span class="lesson-tag">选修</span><span class="duration">阅读 20 min</span><span class="lesson-arrow">▾</span></div>
+            <div class="lesson-body" id="l44">
+              <div class="lb-lead">量潮把自己定位成"制度创新实验室"——规则，是它反复打磨的核心产品。</div>
+              <p><strong>选修说明：</strong>这一节是<strong>创始人思考 / 组织实验</strong>，内容属于公司治理哲学，而不是"新人必须掌握的工作事实"。建议你先完成一些真实工作——在项目里经历过规则冲突、授权问题、责任边界之后，再回来读这节，理解会完全不同。</p>
+              <p>量潮不是一个标准的咨询公司，也不是单纯的培训机构，而是一个<strong>"实验室"</strong>：用科学方法不断试错迭代，去研发"制度"这个产品。它的三个层次：</p>
+              <div class="lb-kv"><b>定位</b><span>制度创新实验室（手段）——规则的设计师、组织进化的工程师</span></div>
+              <div class="lb-kv"><b>使命</b><span>做行业教科书（动作）——把混沌经验变成标准知识，把复杂管理变成可执行流程</span></div>
+              <div class="lb-kv"><b>愿景</b><span>构建规则清晰、价值涌现的商业生态（结果）</span></div>
+              <p>两条底色：</p>
+              <ul>
+                <li><strong>价值观"我即是标准"</strong> — 先把自己变成制度的"活标本"，验证这条路能走通，再把标准推演给行业</li>
+                <li><strong>方法论"自我淘汰"</strong> — 相信我会过时，所以迫不及待想证明自己错了，从而进化到下一阶段</li>
+              </ul>
+              <p>在组织内部，这套理念落地为从"人治"走向"法治"：矩阵式组织架构、公司代表大会、透明化经营。制度的最终目的，是<strong>保护温情</strong>——让好的行为在规则里自然生长，而不是靠人情维系。</p>
+              <div class="lb-tip"><strong>一句话记忆：</strong>实验室（身份）→ 写教科书（动作）→ 新生态（结果）；"我即是标准"，"规则保护温情"。</div>
+            </div>
+          </div>
+
+          <div class="m1-summary">
+            <div class="m1-summary-title">📌 本章小结 · 这些问题还没有答案</div>
+            <p><b>4.1 为什么尽可能公开？</b>公开不是放弃护城河，是把信任成本砍掉——但永远清楚"哪些不能公开"。</p>
+            <p><b>4.2 为什么能做四件事？</b>一个内核 × 四个方向——而"内核到底是什么"仍在验证。</p>
+            <p><b>4.3 什么是真正的核心竞争力？</b>还在寻找：四个候选，等待真实业务来验证。</p>
+            <p><b>4.4 规则是为了什么？</b>规则保护温情——这是创始人思考，建议完成真实工作后再读。</p>
+          </div>
+
           <hr class="horizon-sm">
           <div style="display:flex;gap:var(--sp-3)"><button class="btn btn-filled" onclick="showModule('m5')">→ 下一模块</button></div>
         </div>
@@ -1113,18 +1498,34 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
         <div class="ocean-bg"><div class="ocean-img"></div><div class="ocean-fade"></div></div>
         <div class="card" style="border-color:var(--secondary)">
           <h2>📝 五、微型创业：Sell Your Demo</h2>
-          <p class="subtitle">你已经了解了量潮的业务体系。现在找到公司可能感兴趣但还没做的方向，做一个 demo sale 给总部。</p>
+          <p class="subtitle">发现机会，做出原型，说服总部下注。</p>
           <hr class="horizon">
-          <p style="font-size:var(--fs-body2);color:var(--on-surface-variant);margin-bottom:var(--sp-4)">ⓘ 这不是"交作业"——这是<strong>微型创业</strong>。你扮演分公司 CEO，总部扮演投资人。我们不给你出题，你<strong>自己选题</strong>。</p>
-          <div class="form-group"><label>你的"公司"叫什么？（项目名称）</label><input type="text" placeholder="给你的微型创业项目起一个名字"></div>
-          <div class="form-group"><label>你发现了公司的什么盲区或机会？</label><textarea placeholder="基于前四个模块的上下文，描述你发现的公司可能感兴趣但还没做的方向..."></textarea></div>
-          <div class="form-group"><label>你的 Demo 打算怎么做？</label><textarea placeholder="2 周内你能做出什么来 sale 给我们？..."></textarea></div>
-          <div class="form-row">
-            <div class="form-group"><label>方向类型</label><select><option>技术探索</option><option>产品构建</option><option>商务拓展</option><option>组织创新</option></select></div>
-            <div class="form-group"><label>组队方式</label><select><option>个人独立</option><option>已找好搭档</option><option>希望在组队广场招募</option></select></div>
+          <p style="font-size:var(--fs-body2);color:var(--on-surface-variant);margin-bottom:var(--sp-3)">前四章告诉你量潮从哪里来、在做什么、怎么做事，以及正在探索什么。现在轮到你给出自己的答案。</p>
+          <p style="font-size:var(--fs-body2);color:var(--on-surface-variant);margin-bottom:var(--sp-4)">从真实用户和真实问题出发，发现一个值得量潮进一步验证的机会。你有两周时间，把判断变成一个可以被体验、测试或讨论的 Demo，然后向总部争取下一阶段资源。</p>
+          <div class="lb-tip" style="margin-bottom:var(--sp-3)">这不是"交作业"——这是一次<strong>微型创业实验</strong>。你是项目 CEO，总部是你的内部投资人。总部不会给你出题，你<strong>自己发现机会、验证判断</strong>，并用 Demo 争取下一阶段资源。我们不要求你的判断一定正确，你需要证明的是：<strong>你能发现问题、形成假设、快速验证，并根据证据更新判断。</strong></div>
+          <p style="font-size:var(--fs-body2);color:var(--on-surface-variant);margin-bottom:var(--sp-4)"><strong>Sale 是什么？</strong>不是把 Demo"卖个好价钱"，而是说服总部相信这个机会值得继续投入资源。好的项目不一定是全新方向——也可能是已经做了但做得不好、有需求但没产品化、内部工具可变成外部产品、业务之间断点、或已有产品缺某类用户场景。</p>
+          <div class="m1-summary" style="margin-top:0;margin-bottom:var(--sp-4)">
+            <div class="m1-summary-title">🎯 总部怎么评审？四个维度</div>
+            <p><b>机会价值 30%</b> — 问题是否真实、值得解决</p>
+            <p><b>量潮匹配度 20%</b> — 为什么是我们做，而不是别人</p>
+            <p><b>验证质量 30%</b> — Demo 是否真正验证了关键假设</p>
+            <p><b>表达与复盘 20%</b> — 是否说清楚学到了什么、下一步是什么</p>
+            <p>"是否成功"看的不是 Demo 漂不漂亮，而是：<b>两周以后，我们是不是比两周以前更确定这件事该做还是不该做。</b></p>
           </div>
+          <div class="form-group"><label>0 · 你的姓名</label><input type="text" id="pf-student" placeholder="填上姓名，后台才能把立项关联到你的学员档案"></div>
+          <div class="form-group"><label>1 · 你的项目叫什么？</label><input type="text" id="pf-name" placeholder="给这次微型创业起一个便于传播的名字"></div>
+          <div class="form-group"><label>2 · 你发现了什么机会？</label><textarea id="pf-opp" placeholder="谁遇到了什么问题？现有的解决方式哪里不够好？..."></textarea></div>
+          <div class="form-group"><label>3 · 为什么这个机会适合量潮？</label><textarea id="pf-fit" placeholder="它和量潮已有的业务、能力、客户、人才或技术资产有什么关系？..."></textarea></div>
+          <div class="form-group"><label>4 · 你的核心假设是什么？</label><textarea id="pf-hyp" placeholder="如果只能验证一件事，两周后你最想证明什么？..."></textarea></div>
+          <div class="form-group"><label>5 · 你准备 Sale 什么 Demo？</label><textarea id="pf-demo" placeholder="两周内你能做出什么可以被真实体验、测试或评审的东西？..."></textarea></div>
+          <div class="lb-tip" style="margin-bottom:var(--sp-3)">Demo 不等于完整产品。网页原型、数据集、自动化流程、AI Agent、课程原型、咨询方案、运营实验都可以。关键不是"做得大"，而是<strong>能验证一个重要假设</strong>。</div>
+          <div class="form-row">
+            <div class="form-group"><label>方向类型</label><select id="pf-direction"><option>产品</option><option>技术</option><option>数据</option><option>课程</option><option>咨询</option><option>组织与运营</option></select></div>
+            <div class="form-group"><label>组队方式</label><select id="pf-team"><option>个人独立</option><option>已找好搭档</option><option>希望在组队广场招募</option></select></div>
+          </div>
+          <div id="pf-result" style="display:none;margin-top:14px"></div>
           <hr class="horizon-sm">
-          <div style="display:flex;gap:var(--sp-3)"><button class="btn btn-filled btn-lg">✓ 提交申报</button><button class="btn btn-text">保存草稿</button><button class="btn btn-text" onclick="showModule('overview')">← 返回课程首页</button></div>
+          <div style="display:flex;gap:var(--sp-3)"><button class="btn btn-filled btn-lg" onclick="submitProposal()">提交立项申请</button><button class="btn btn-text">保存草稿</button><button class="btn btn-text" onclick="showModule('overview')">← 返回课程首页</button></div>
         </div>
       </div>
 
@@ -1162,12 +1563,12 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
           <div class="nav-item" onclick="scrollToCard('member-card')">👥 成员管理</div>
           <div class="nav-item" onclick="scrollToCard('course-mgmt-card')">📖 课程管理</div>
           <div class="nav-item" onclick="scrollToCard('student-card')">👤 学员管理</div>
+          <div class="nav-item" onclick="scrollToCard('proposals-card')">🚀 立项管理</div>
         </div>
       </div>
       <div class="nav-group">
         <div class="nav-label" onclick="toggleNav('form')"><span class="arr" id="arr-form">▼</span>表单配置</div>
         <div class="nav-kids" id="kids-form" style="max-height:300px">
-          <div class="nav-item sub" onclick="scrollToCard('apply-card')">📝 立项申请表</div>
           <div class="nav-item sub" onclick="scrollToCard('stage-report-card')">📋 阶段报告模板</div>
           <div class="nav-item sub" onclick="scrollToCard('review-card')">✅ 验收评审表</div>
         </div>
@@ -1322,36 +1723,39 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
 
       <!-- 学员管理 -->
       <div class="section">
-        <div class="section-hd"><h3>学员管理</h3><span style="font-size:13px;color:var(--text-3)">在读学员与学习进度</span></div>
+        <div class="section-hd"><h3>学员管理</h3><span style="font-size:13px;color:var(--text-3)">在读学员、学习进度与立项状态</span></div>
         <div class="section-body">
           <div class="card" id="student-card" style="padding:0">
             <table class="datatable">
-              <thead><tr><th>学员</th><th>当前课程</th><th>进度</th><th>最近活跃</th><th>状态</th></tr></thead>
-              <tbody>
-                <tr><td><strong>张同学</strong></td><td>生产实习</td><td>3/5 模块</td><td>2026-08-06</td><td><span class="badge active-status">在读</span></td></tr>
-                <tr><td><strong>李同学</strong></td><td>知识工作</td><td>2/4 阶段</td><td>2026-08-05</td><td><span class="badge active-status">在读</span></td></tr>
-                <tr><td><strong>王同学</strong></td><td>氛围编程</td><td>4/4 阶段</td><td>2026-08-04</td><td><span class="badge review">待晋升</span></td></tr>
-                <tr><td><strong>陈同学</strong></td><td>大数据导论</td><td>1/4 阶段</td><td>2026-08-06</td><td><span class="badge active-status">在读</span></td></tr>
-                <tr><td><strong>刘同学</strong></td><td>生产实习</td><td>5/5 模块</td><td>2026-08-03</td><td><span class="badge done">已完成</span></td></tr>
+              <thead><tr><th>学员</th><th>当前课程</th><th>进度</th><th>最近活跃</th><th>立项</th><th>状态</th></tr></thead>
+              <tbody id="stu-tbody">
+                <tr><td colspan="6" style="text-align:center;color:var(--text-3)">暂无学员</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- 立项申请表 -->
+      <!-- 立项管理 -->
       <div class="section">
-        <div class="section-hd"><h3>立项申请表</h3><span style="font-size:13px;color:var(--text-3)">双创项目申报表单——学员自主选题、自由组队</span></div>
+        <div class="section-hd"><h3>立项管理</h3><span style="font-size:13px;color:var(--text-3);display:flex;align-items:center;gap:12px">学员提交的立项申请（存本机浏览器，无需审批，状态为已提交）<button class="btn btn-outlined btn-sm" id="btn-history" onclick="toggleHistory()">📜 历史记录</button></span></div>
         <div class="section-body">
-          <div class="card" id="apply-card">
-            <div class="form-group"><label>项目名称</label><input type="text" placeholder="给你的微型创业项目起一个名字"></div>
-            <div class="form-group"><label>你发现了公司的什么盲区或机会？</label><textarea placeholder="基于课程上下文，描述你发现的公司可能感兴趣但还没做的方向..."></textarea></div>
-            <div class="form-group"><label>你的 Demo 打算怎么做？</label><textarea placeholder="2 周内你能做出什么来 sale 给总部？..."></textarea></div>
-            <div class="form-row">
-              <div class="form-group"><label>方向类型</label><select><option>技术探索</option><option>产品构建</option><option>商务拓展</option><option>组织创新</option></select></div>
-              <div class="form-group"><label>组队方式</label><select><option>个人独立</option><option>已找好搭档</option><option>希望在组队广场招募</option></select></div>
-            </div>
-            <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-filled btn-sm">✓ 提交申报</button><button class="btn btn-text btn-sm">保存草稿</button></div>
+          <div class="card" id="proposals-card" style="padding:0">
+            <table class="datatable">
+              <thead><tr><th>项目名称</th><th>学员</th><th>方向</th><th>组队</th><th>核心假设</th><th>提交时间</th><th>状态</th><th>操作</th></tr></thead>
+              <tbody id="prop-tbody">
+                <tr><td colspan="8" style="text-align:center;color:var(--text-3)">暂无立项申请</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card" id="prop-history-card" style="padding:0;display:none;margin-top:14px">
+            <div style="padding:12px 16px;border-bottom:1px solid var(--line-light);font-size:13px;color:var(--text-2)"><strong>📜 历史记录</strong>（被删除的立项，软删除留痕）</div>
+            <table class="datatable">
+              <thead><tr><th>项目名称</th><th>学员</th><th>提交时间</th><th>删除时间</th><th>状态</th></tr></thead>
+              <tbody id="prop-history-tbody">
+                <tr><td colspan="5" style="text-align:center;color:var(--text-3)">暂无历史记录</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -1482,6 +1886,7 @@ function switchView(view) {
   if(view==='back'){ document.getElementById('nav-manage').classList.add('active'); }
   else { document.getElementById('nav-learning').classList.add('active'); }
   if(view==='back'){ document.querySelectorAll('#view-back .nav-item').forEach(function(m){m.classList.remove('active')}); }
+  if(view==='back'){ if (typeof loadBackendData === 'function') loadBackendData(); }
   document.getElementById('appbar').style.display='flex';
   document.getElementById('workspace').style.display='flex';
   var h = document.getElementById('appbar-horizon'); if(h) h.style.display = (view==='courses') ? 'block' : 'none';
@@ -1701,8 +2106,8 @@ function enterCourse(id){
     if(fill) fill.style.width = pct + '%';
     document.getElementById('v4-badge').textContent = '🏭 生产实习 · 微型创业';
     document.getElementById('v4-title').innerHTML = '量潮课堂 · <em>实训基地</em>';
-    document.getElementById('v4-desc').innerHTML = '量潮是"总部"，你是"分公司"——我们不给你出题，你<strong>自己给自己出题</strong>。用前 4 个模块了解公司，找到盲区，做一个微型创业 demo <strong>sale 给总部</strong>。同一套评分，不同分数线：课程 60 分及格，招聘 90 分录用。';
-    document.getElementById('v4-meta').innerHTML = '<span>📚 5 个模块</span><span>⏱ 预计 2 周</span><span>👤 38 人在学</span><span>🎯 同一套卷子，不同分数线</span>';
+    document.getElementById('v4-desc').innerHTML = '量潮是"总部"，你是"分公司"——用前 4 个模块形成你自己的商业判断：发现一个值得验证的机会，用两周做出可体验的 Demo，<strong>说服总部下注</strong>。这不是交作业：我们不给题目，但要求你证明自己能发现问题、形成假设、快速验证，并根据证据更新判断。';
+    document.getElementById('v4-meta').innerHTML = '<span>📚 5 个模块</span><span>⏱ 预计 2 周</span><span>👤 38 人在学</span><span>🎯 机会验证 · 向总部下注</span>';
     document.getElementById('v4-progress-pct').textContent = pct + '%';
     document.getElementById('v4-btn-continue').textContent = '▶ 继续学习';
     showModule('overview');
@@ -1752,7 +2157,7 @@ function showModule(id){
   var t=document.getElementById('mod-'+id);if(t)t.classList.add('show');
   var sb=document.getElementById('stepbar');
   if(id==='overview'||id==='consult'){sb.style.display='none'}
-  else {sb.style.display='flex';updateStepBar(id);saveProgress('prod', id);}
+  else {sb.style.display='flex';updateStepBar(id);saveProgress('prod', id);if(typeof reportProgress==='function')reportProgress();}
   // 顶部潮汐线：首页隐藏，模块页显示
   var h=document.getElementById('appbar-horizon');
   if(h) h.style.display = (id==='overview'||id==='consult') ? 'none' : 'block';
@@ -1762,6 +2167,11 @@ function showModule(id){
     var fill = document.querySelector('#view-front .v4-progress-fill');
     if(fill) fill.style.width = pct + '%';
   }
+}
+function toggleLesson(id){
+  var body=document.getElementById(id),wrap=body.parentNode;
+  var open=body.classList.toggle('show');
+  wrap.classList.toggle('open', open);
 }
 function updateStepBar(activeId){
   var map={m1:1,m2:2,m3:3,m4:4,m5:5};var cur=map[activeId]||0;
@@ -1801,6 +2211,203 @@ function closeFormPage(){ document.getElementById('appbar').style.display='flex'
 
 // ====== 初始化 ======
 (function(){ document.getElementById('stepbar').style.display='none'; })();
+</script>
+
+<script>
+// ====== 立项闭环（纯前端：localStorage 持久化，无需服务端，无审批） ======
+var SEED_STUDENTS = [];
+var SEED_PROPOSALS = [];
+
+function readStore(key, fallback){
+  try { var v = JSON.parse(localStorage.getItem(key)); if (Array.isArray(v)) return v; } catch(e){}
+  return fallback;
+}
+function writeStore(key, arr){ localStorage.setItem(key, JSON.stringify(arr)); }
+function getProposals(){ return readStore('qt-proposals', SEED_PROPOSALS); }
+function getStudents(){ return readStore('qt-students', SEED_STUDENTS); }
+function nowStr(){
+  function p(n){ return (n < 10 ? '0' : '') + n; }
+  var d = new Date();
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+}
+
+function submitProposal(){
+  var payload = {
+    studentName: document.getElementById('pf-student').value,
+    projectName: document.getElementById('pf-name').value,
+    opportunity: document.getElementById('pf-opp').value,
+    fit: document.getElementById('pf-fit').value,
+    hypothesis: document.getElementById('pf-hyp').value,
+    demo: document.getElementById('pf-demo').value,
+    directionType: document.getElementById('pf-direction').value,
+    teamMode: document.getElementById('pf-team').value
+  };
+  var box = document.getElementById('pf-result');
+  if(!payload.studentName.trim() || !payload.projectName.trim()){
+    box.style.display='block';
+    box.innerHTML = '<div class="lb-tip" style="border-color:rgba(242,95,92,.4);background:rgba(242,95,92,.06)"><strong>还差一点：</strong>至少填写「姓名」和「项目名称」。</div>';
+    return;
+  }
+  var rec = {
+    id: 'P' + new Date().getTime(),
+    studentName: payload.studentName.trim(),
+    projectName: payload.projectName.trim(),
+    opportunity: payload.opportunity.trim(),
+    fit: payload.fit.trim(),
+    hypothesis: payload.hypothesis.trim(),
+    demo: payload.demo.trim(),
+    directionType: payload.directionType,
+    teamMode: payload.teamMode,
+    status: '已提交',
+    submittedAt: nowStr()
+  };
+  var list = getProposals();
+  list.unshift(rec);
+  writeStore('qt-proposals', list);
+  setLearnerName(rec.studentName);
+  mergeStudent(rec);
+  reportProgress();
+  saveProgress('prod', 'm5');
+  updateStepBar('m5');
+  var fill = document.querySelector('#view-front .v4-progress-fill');
+  if(fill) fill.style.width = '100%';
+  var pct = document.getElementById('v4-progress-pct');
+  if(pct) pct.textContent = '100%';
+  box.style.display='block';
+  box.innerHTML = '<div class="lb-tip"><strong>✅ 立项已提交（无需审批）</strong>编号 ' + rec.id + '，于 ' + rec.submittedAt + ' 存入本机（浏览器本地存储）。后台「立项管理」/「学员管理」即可查看。状态：已提交。</div>';
+}
+
+function mergeStudent(rec){
+  var students = getStudents();
+  var p = getProgress('prod');
+  var prog = p.max || 0;
+  var status = prog >= 5 ? '已完成' : '在读';
+  var found = false;
+  for(var i=0;i<students.length;i++){
+    if(students[i].name === rec.studentName){
+      found = true;
+      students[i].course = '生产实习';
+      students[i].progressMax = Math.max(students[i].progressMax || 0, prog);
+      students[i].progressTotal = 5;
+      students[i].activeAt = nowStr().slice(0,10);
+      students[i].status = status;
+      break;
+    }
+  }
+  if(!found){
+    students.unshift({name: rec.studentName, course:'生产实习', progressMax:prog, progressTotal:5, activeAt: nowStr().slice(0,10), status:status});
+  }
+  writeStore('qt-students', students);
+}
+
+// ====== 上报进度：切模块即同步到后台学员数据 ======
+function learnerName(){
+  var n = localStorage.getItem('qt-learner');
+  return (n && n.trim()) ? n.trim() : '演示学员';
+}
+function setLearnerName(newName){
+  var old = learnerName();
+  localStorage.setItem('qt-learner', newName.trim());
+  if(old === newName.trim()) return;
+  var students = getStudents();
+  for(var i=0;i<students.length;i++){
+    if(students[i].name === old){ students[i].name = newName.trim(); writeStore('qt-students', students); break; }
+  }
+}
+function reportProgress(){
+  var p = getProgress('prod');
+  if(!p.max) return;
+  var students = getStudents();
+  var name = learnerName();
+  var found = false;
+  for(var i=0;i<students.length;i++){
+    if(students[i].name === name){
+      found = true;
+      students[i].course = '生产实习';
+      students[i].progressMax = Math.max(students[i].progressMax || 0, p.max);
+      students[i].progressTotal = 5;
+      students[i].activeAt = nowStr().slice(0,10);
+      if(p.max >= 5) students[i].status = '已完成';
+      else if(students[i].status !== '已完成') students[i].status = '在读';
+      break;
+    }
+  }
+  if(!found){
+    students.unshift({name:name, course:'生产实习', progressMax:p.max, progressTotal:5, activeAt:nowStr().slice(0,10), status:(p.max>=5?'已完成':'在读')});
+  }
+  writeStore('qt-students', students);
+}
+
+function getHistory(){ return readStore('qt-proposals-history', []); }
+
+function deleteProposal(id){
+  var rec = null;
+  var list = getProposals().filter(function(p){ if(String(p.id) === String(id)){ rec = p; return false; } return true; });
+  if(!rec) return;
+  if(!confirm('确定删除立项「' + rec.projectName + '」？将移入历史记录。')) return;
+  writeStore('qt-proposals', list);
+  var hist = getHistory();
+  hist.unshift({projectName: rec.projectName, studentName: rec.studentName, submittedAt: rec.submittedAt, directionType: rec.directionType, deletedAt: nowStr()});
+  writeStore('qt-proposals-history', hist);
+  loadBackendData();
+}
+
+function toggleHistory(){
+  var card = document.getElementById('prop-history-card');
+  var btn = document.getElementById('btn-history');
+  if(!card) return;
+  var show = card.style.display === 'none';
+  card.style.display = show ? 'block' : 'none';
+  if(btn) btn.textContent = show ? '📜 收起历史' : '📜 历史记录';
+}
+
+function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+// ====== 后台：加载学员 / 进度 / 立项（纯本地） ======
+function loadBackendData(){
+  var students = getStudents();
+  var proposals = getProposals();
+
+  var stu = document.getElementById('stu-tbody');
+  if(stu){
+    if(!students.length){ stu.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-3)">暂无学员</td></tr>'; }
+    else {
+      stu.innerHTML = students.map(function(s){
+        var prog = s.progressMax + '/' + s.progressTotal;
+        var unit = (s.course === '生产实习') ? ' 模块' : ' 阶段';
+        var badge = s.status === '已完成' ? 'done' : (s.status === '待晋升' ? 'review' : 'active-status');
+        var mine = proposals.filter(function(p){ return p.studentName === s.name; });
+        var lx = mine.length
+          ? '<span class="badge done">✓ ' + esc(mine[0].projectName) + '</span>'
+          : '<span style="color:var(--text-3)">—</span>';
+        return '<tr><td><strong>' + esc(s.name) + '</strong></td><td>' + esc(s.course) + '</td><td>' + prog + unit + '</td><td>' + esc(s.activeAt) + '</td><td>' + lx + '</td><td><span class="badge ' + badge + '">' + esc(s.status) + '</span></td></tr>';
+      }).join('');
+    }
+  }
+
+  var prop = document.getElementById('prop-tbody');
+  if(prop){
+    if(!proposals.length){ prop.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-3)">暂无立项申请</td></tr>'; }
+    else {
+      prop.innerHTML = proposals.map(function(p){
+        var hyp = p.hypothesis.length > 40 ? p.hypothesis.slice(0, 40) + '…' : p.hypothesis;
+        return '<tr><td><strong>' + esc(p.projectName) + '</strong></td><td>' + esc(p.studentName) + '</td><td>' + esc(p.directionType) + '</td><td>' + esc(p.teamMode) + '</td><td title="' + esc(p.hypothesis) + '">' + esc(hyp) + '</td><td>' + esc(p.submittedAt) + '</td><td><span class="badge active-status">' + esc(p.status) + '</span></td><td><button class="btn btn-text btn-sm" style="color:#F25F5C" onclick="deleteProposal(\'' + p.id + '\')">删除</button></td></tr>';
+      }).join('');
+    }
+  }
+
+  var ph = document.getElementById('prop-history-tbody');
+  if(ph){
+    var hist = getHistory();
+    if(!hist.length){ ph.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-3)">暂无历史记录</td></tr>'; }
+    else {
+      ph.innerHTML = hist.map(function(h){
+        return '<tr><td>' + esc(h.projectName) + '</td><td>' + esc(h.studentName) + '</td><td>' + esc(h.submittedAt) + '</td><td>' + esc(h.deletedAt) + '</td><td><span class="badge draft">已删除</span></td></tr>';
+      }).join('');
+    }
+  }
+}
+
 </script>
 
 </body>
