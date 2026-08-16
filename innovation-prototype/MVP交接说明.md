@@ -35,11 +35,13 @@
 - 切到任一模块 `m1`–`m5` 即触发：
   1. `saveProgress('prod', id)` 记录本地进度（`qt-progress-prod`，结构 `{max, last}`）；
   2. `reportProgress()` **上报进度到后台学员数据**（见 3.3 学员表）。
-- m5 内嵌「机会验证」立项表单（5 问 + 方向类型 + 组队），按钮 `submitProposal()`。
+- m5 内嵌「机会验证」立项表单（5 问 + 方向类型 + 组队），按钮 `submitProposal()`。姓名按组队方式拆分填写：
+  - 组队方式选「**个人独立**」→ 只显示「你的姓名」输入框（`pf-ownname`）；
+  - 选「已找好搭档 / 希望在组队广场招募」→ 切换为「队长姓名」（`pf-leader`）+「队员姓名」（`pf-member`，多个用顿号分隔），由 `togglePfNameArea()` 控制显示切换。
 
 ### 3.2 后台（`#view-back`，切顶栏「创新中台 / 数据看板」）
 - **学员管理**：学员 / 当前课程 / 进度(X/5 模块) / 最近活跃 / 立项(✓ 项目名 或 —) / 状态。学员由「上报进度」与「提交立项」自动建档。
-- **立项管理**：项目名称 / 学员 / 方向 / 组队 / 核心假设 / 提交时间 / 状态（已提交）/ 操作（删除）。
+- **立项管理**：项目名称 / 学员 / 方向 / 组队 / 核心假设 / 提交时间 / 状态（已提交）/ 操作（删除）。组队提交时「学员」列显示**队长姓名**，队员姓名存在 `teamMember` 字段，后台列表暂不单独展示。
   - 删除 = **软删除**，记录移入历史（`qt-proposals-history`，含删除时间）。
   - 顶部「📜 历史记录」开关展开历史表。
 - 其余后台区块（课程管理 / 阶段报告模板 / 双创项目管理）为静态展示，不参与闭环。
@@ -50,9 +52,9 @@
 |---|---|---|
 | `qt-progress-prod` | 生产实习进度 | `{"max": 1, "last": "m1"}` |
 | `qt-students` | 学员档案（进度自动上报+立项自动建档） | `[{name, course:'生产实习', progressMax, progressTotal:5, activeAt, status:'在读'\|'已完成'}]` |
-| `qt-proposals` | 立项申请 | `[{id, studentName, projectName, opportunity, fit, hypothesis, demo, directionType, teamMode, status:'已提交', submittedAt}]` |
+| `qt-proposals` | 立项申请 | `[{id, studentName, projectName, opportunity, fit, hypothesis, demo, directionType, teamMode, teamLeader, teamMember, status:'已提交', submittedAt}]` |
 | `qt-proposals-history` | 已删除立项（软删除留痕） | `[{projectName, studentName, submittedAt, directionType, deletedAt}]` |
-| `qt-learner` | 当前学员身份（默认「演示学员」，提交立项时改用表单所填姓名） | 字符串 |
+| `qt-learner` | 当前学员身份（默认「演示学员」，提交立项时改用表单所填姓名；组队时取**队长姓名**） | 字符串 |
 
 - 种子数据：`SEED_STUDENTS` / `SEED_PROPOSALS` 均为空，首次打开是干净空状态。
 - 示例数据键均为 `qt-*` 前缀；清空可在控制台 `localStorage.clear()`。
@@ -61,9 +63,10 @@
 
 | 函数 | 作用 |
 |---|---|
-| `submitProposal()` | 校验姓名/项目名 → 生成记录写入 `qt-proposals` → 同步学员身份 → 建档/更新学员 → 上报进度 → 进度 100% |
+| `submitProposal()` | 按组队方式取姓名（个人=`pf-ownname`，组队=`pf-leader`）→ 校验姓名/项目名 → 生成记录（含 `teamLeader`/`teamMember`）写入 `qt-proposals` → 同步学员身份 → 建档/更新学员 → 上报进度 → 进度 100% |
+| `togglePfNameArea()` | 监听组队方式下拉，切换「个人姓名」与「队长+队员」两个输入区块 |
 | `reportProgress()` | 按当前学员把 `qt-progress-prod` 进度 upsert 到 `qt-students` |
-| `mergeStudent(rec)` | 按立项姓名建档/更新学员（进度取真实上报值） |
+| `mergeStudent(rec)` | 按立项姓名（组队时=队长姓名）建档/更新学员（进度取真实上报值） |
 | `learnerName()` / `setLearnerName(n)` | 读写当前学员身份，改名时迁移既有学员记录 |
 | `deleteProposal(id)` | 软删除：移入历史 + 学员表联动刷新 |
 | `getHistory()` / `toggleHistory()` | 历史记录读写 / 展开收起 |
@@ -92,7 +95,7 @@
    - `DELETE /api/proposals/:id`：软删除（is_deleted + deleted_at），对应现「删除→历史」。
    - `GET /api/proposals/history`：历史记录。
 3. **学员档案**
-   - 进度上报与提交立项时自动 upsert 学员（按 `studentName`/`userId`），字段见 3.3。
+   - 进度上报与提交立项时自动 upsert 学员（按 `studentName`/`userId`），字段见 3.3。组队时以 `studentName`（队长）建档，`teamMember` 存队员姓名，不单独建档。
 4. **身份**
    - 原型用姓名做身份；服务端建议换 `userId`，`qt-learner` 对应登录态。
 5. **班级**
@@ -109,6 +112,7 @@
 
 1. 打开原型（本地 file:// 或线上地址）→ 课程列表仅生产实习可进。
 2. 依次点击 m1–m5 → 顶部进度条推进 → 切到后台「学员管理」出现「演示学员」且进度与实点同步。
-3. 回到 m5 填姓名/项目名提交 → 后台「立项管理」出现记录（状态：已提交）→「学员管理」该学员出现 ✓ 项目名。
-4. 立项管理点「删除」→ 记录从当前列表消失 → 点「📜 历史记录」可见该条（含删除时间）。
-5. 刷新页面数据不丢（localStorage 持久化）。
+3. 回到 m5 提交立项（**个人**：选「个人独立」填自己的姓名；**组队**：选「已找好搭档」填队长+队员姓名）→ 后台「立项管理」出现记录（状态：已提交，组队时「学员」列=队长）→「学员管理」该学员出现 ✓ 项目名。
+4. 组队/个人切换验证：下拉组队方式时姓名输入区随之切换（`togglePfNameArea`）。
+5. 立项管理点「删除」→ 记录从当前列表消失 → 点「📜 历史记录」可见该条（含删除时间）。
+6. 刷新页面数据不丢（localStorage 持久化）。
