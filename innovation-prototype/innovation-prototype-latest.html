@@ -1512,7 +1512,6 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
             <p><b>表达与复盘 20%</b> — 是否说清楚学到了什么、下一步是什么</p>
             <p>"是否成功"看的不是 Demo 漂不漂亮，而是：<b>两周以后，我们是不是比两周以前更确定这件事该做还是不该做。</b></p>
           </div>
-          <div class="form-group"><label>0 · 你的姓名</label><input type="text" id="pf-student" placeholder="填上姓名，后台才能把立项关联到你的学员档案"></div>
           <div class="form-group"><label>1 · 你的项目叫什么？</label><input type="text" id="pf-name" placeholder="给这次微型创业起一个便于传播的名字"></div>
           <div class="form-group"><label>2 · 你发现了什么机会？</label><textarea id="pf-opp" placeholder="谁遇到了什么问题？现有的解决方式哪里不够好？..."></textarea></div>
           <div class="form-group"><label>3 · 为什么这个机会适合量潮？</label><textarea id="pf-fit" placeholder="它和量潮已有的业务、能力、客户、人才或技术资产有什么关系？..."></textarea></div>
@@ -1521,7 +1520,12 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-
           <div class="lb-tip" style="margin-bottom:var(--sp-3)">Demo 不等于完整产品。网页原型、数据集、自动化流程、AI Agent、课程原型、咨询方案、运营实验都可以。关键不是"做得大"，而是<strong>能验证一个重要假设</strong>。</div>
           <div class="form-row">
             <div class="form-group"><label>方向类型</label><select id="pf-direction"><option>产品</option><option>技术</option><option>数据</option><option>课程</option><option>咨询</option><option>组织与运营</option></select></div>
-            <div class="form-group"><label>组队方式</label><select id="pf-team"><option>个人独立</option><option>已找好搭档</option><option>希望在组队广场招募</option></select></div>
+            <div class="form-group"><label>组队方式</label><select id="pf-team" onchange="togglePfNameArea()"><option>个人独立</option><option>已找好搭档</option><option>希望在组队广场招募</option></select></div>
+          </div>
+          <div class="form-group" id="pf-name-solo"><label>0 · 你的姓名</label><input type="text" id="pf-ownname" placeholder="填上姓名，后台才能把立项关联到你的学员档案"></div>
+          <div class="form-row" id="pf-name-team" style="display:none">
+            <div class="form-group"><label>队长姓名</label><input type="text" id="pf-leader" placeholder="队长姓名"></div>
+            <div class="form-group"><label>队员姓名</label><input type="text" id="pf-member" placeholder="队员姓名（多个用顿号分隔）"></div>
           </div>
           <div id="pf-result" style="display:none;margin-top:14px"></div>
           <hr class="horizon-sm">
@@ -2231,16 +2235,32 @@ function nowStr(){
   return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
 }
 
+function togglePfNameArea(){
+  var team = document.getElementById('pf-team').value;
+  var solo = document.getElementById('pf-name-solo');
+  var grp = document.getElementById('pf-name-team');
+  if(team === '个人独立'){
+    solo.style.display = 'block';
+    grp.style.display = 'none';
+  } else {
+    solo.style.display = 'none';
+    grp.style.display = 'block';
+  }
+}
+
 function submitProposal(){
+  var teamMode = document.getElementById('pf-team').value;
+  var isTeam = teamMode !== '个人独立';
+  var studentName = isTeam ? document.getElementById('pf-leader').value : document.getElementById('pf-ownname').value;
   var payload = {
-    studentName: document.getElementById('pf-student').value,
+    studentName: studentName,
     projectName: document.getElementById('pf-name').value,
     opportunity: document.getElementById('pf-opp').value,
     fit: document.getElementById('pf-fit').value,
     hypothesis: document.getElementById('pf-hyp').value,
     demo: document.getElementById('pf-demo').value,
     directionType: document.getElementById('pf-direction').value,
-    teamMode: document.getElementById('pf-team').value
+    teamMode: teamMode
   };
   var box = document.getElementById('pf-result');
   if(!payload.studentName.trim() || !payload.projectName.trim()){
@@ -2258,6 +2278,8 @@ function submitProposal(){
     demo: payload.demo.trim(),
     directionType: payload.directionType,
     teamMode: payload.teamMode,
+    teamLeader: isTeam ? document.getElementById('pf-leader').value.trim() : '',
+    teamMember: isTeam ? document.getElementById('pf-member').value.trim() : '',
     status: '已提交',
     submittedAt: nowStr()
   };
